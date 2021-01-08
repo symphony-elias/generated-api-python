@@ -1,11 +1,13 @@
 import asyncio
 
-TOKEN = 'eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiJwb3N0bWFuLWVjcm96ZSIsImV4cCI6MTYxMDExMzE3NX0.fPtsdm1cpckxNW-RsMEBNFhk9X56IDZtN-9qgIxNzkSMoFFEixQzY-1YT6iysIpAg2VcsgPHfx67joEWXeZLdBrtjTl6qlPbovFOUgoE77aaIp88hrCrnZB3FP69fzbA-NgE18i_6CSJNz0qq7XjzLr8cfeBgQy5bkl9ZavZUO-dftypkQvqJfoeoAtp5harsfmJlQsDn1E8GqykD0_9T4rP0TRbwReHIIczT9sfWJdI8Bbh2iORQCV9w1w-PMpSedjnBufQhjTFrE2doSfeKazrGj0Q87Xcl-_rRQeBxqGLPyrV4-S8o1AeOjPR58F11JfQZ1ZY3Ah8qHZTdaWbT7ed6KY0qks-6_Aq0NxplNNIC5d4rjxSQT6chHJ6YDBipp6RfbY_2b7fuJRxYK3PlcQMtWXngVhEyHUh15hjvgEzR6vH3g5i4JKJJRyUsA3Ct5-xbquB4c7u_ciA3kHgRL_UXw1WCz_IYDF4sAtqOwc4sNohIZCT74PWnppw62kSn6hwssA1Y2qzc6IDAAigkEuwLjAdTVSg3y453je893jSB7CyFPRjqdcsduRkuMNxHD-0Mc16Xnu0IRFTDXbtXCDcnBxnCXzZuxRVsf8obC4WpparEESy119_Hu_KZXROv-qGt8h7Iv36kz_t6W1Wagb7caOUjCUJNgzdEusP0Lo'
+from jose import jwt
+
+import datetime
 
 
-def urllib_post():
+def urllib_post(token):
     from openapi_client_urllib import ApiClient, Configuration, AuthenticateRequest, AuthenticationApi
-    request = AuthenticateRequest(token=TOKEN)
+    request = AuthenticateRequest(token=token)
     configuration = Configuration(host="https://devx1.symphony.com/login")
 
     api = AuthenticationApi(ApiClient(configuration=configuration))
@@ -30,5 +32,24 @@ def aiohttp_post():
     print(post)
 
 
+def get_key():
+    with open('/Users/elias.croze/.symphony/fbbot_privatekey.pkcs8', 'r') as f:
+        content = f.readlines()
+        key = ''.join(content)
+        return key
+
+
+def create_jwt():
+    private_key = get_key()
+    expiration_date = int(datetime.datetime.now(datetime.timezone.utc).timestamp() + (5 * 58))
+    payload = {
+        'sub': "postman-ecroze",
+        'exp': expiration_date
+    }
+    return jwt.encode(payload, private_key, algorithm='RS512')
+
+
 if __name__ == "__main__":
-    aiohttp_post()
+    encoded = create_jwt()
+    print(encoded)
+    urllib_post(encoded)
