@@ -179,7 +179,8 @@ class ApiClient(object):
 
         try:
             # perform request and return response
-            response_data = await self.request(
+            # CHANGE BELOW, 'await' removed
+            response_data = self.request(
                 method, url, query_params=query_params, headers=header_params,
                 post_params=post_params, body=body,
                 _preload_content=_preload_content,

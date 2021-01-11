@@ -15,19 +15,17 @@ def urllib_post(token):
     print(post)
 
 
-def aiohttp_post():
+def aiohttp_post(token):
     from openapi_client_aio.api.authentication_api import AuthenticationApi
     from openapi_client_aio.api_client import ApiClient
     from openapi_client_aio.configuration import Configuration
     from openapi_client_aio.models.authenticate_request import AuthenticateRequest
 
-    request = AuthenticateRequest(token=TOKEN)
-    configuration = Configuration(host="https://devx1.symphony.com/login")
+    request = AuthenticateRequest(token=token)
+    configuration = Configuration(host="https://develop2.symphony.com/login")
     api = AuthenticationApi(ApiClient(configuration=configuration))
 
-    loop = asyncio.get_event_loop()
-    post = loop.run_until_complete(api.pubkey_authenticate_post(authenticate_request=request, async_req=True).get())
-    loop.close()
+    post = asyncio.run(api.pubkey_authenticate_post(authenticate_request=request))
 
     print(post)
 
@@ -50,6 +48,4 @@ def create_jwt():
 
 
 if __name__ == "__main__":
-    encoded = create_jwt()
-    print(encoded)
-    urllib_post(encoded)
+    aiohttp_post(create_jwt())
