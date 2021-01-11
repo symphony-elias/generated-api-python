@@ -1,5 +1,3 @@
-# coding: utf-8
-
 """
     Login API
 
@@ -10,18 +8,24 @@
 """
 
 
-from __future__ import absolute_import
-
 import re  # noqa: F401
+import sys  # noqa: F401
 
-# python 2 and python 3 compatibility library
-import six
-
-from openapi_client_urllib.api_client import ApiClient
-from openapi_client_urllib.exceptions import (  # noqa: F401
-    ApiTypeError,
-    ApiValueError
+from openapi_client_urllib.api_client import ApiClient, Endpoint
+from openapi_client_urllib.model_utils import (  # noqa: F401
+    check_allowed_values,
+    check_validations,
+    date,
+    datetime,
+    file_type,
+    none_type,
+    validate_and_convert_types
 )
+from openapi_client_urllib.model.authenticate_extension_app_request import AuthenticateExtensionAppRequest
+from openapi_client_urllib.model.authenticate_request import AuthenticateRequest
+from openapi_client_urllib.model.error import Error
+from openapi_client_urllib.model.extension_app_tokens import ExtensionAppTokens
+from openapi_client_urllib.model.token import Token
 
 
 class AuthenticationApi(object):
@@ -36,598 +40,608 @@ class AuthenticationApi(object):
             api_client = ApiClient()
         self.api_client = api_client
 
-    def pubkey_app_authenticate_post(self, authenticate_request, **kwargs):  # noqa: E501
-        """Authenticate an App with public key  # noqa: E501
+        def __pubkey_app_authenticate_post(
+            self,
+            authenticate_request,
+            **kwargs
+        ):
+            """Authenticate an App with public key  # noqa: E501
 
-        Based on an authentication request token signed by the application's RSA private key, authenticate the API caller and return a session token.  A HTTP 401 Unauthorized error is returned on errors during authentication (e.g. invalid app, malformed authentication token, app's public key not imported in the pod, invalid token signature etc.).   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.pubkey_app_authenticate_post(authenticate_request, async_req=True)
-        >>> result = thread.get()
+            Based on an authentication request token signed by the application's RSA private key, authenticate the API caller and return a session token.  A HTTP 401 Unauthorized error is returned on errors during authentication (e.g. invalid app, malformed authentication token, app's public key not imported in the pod, invalid token signature etc.).   # noqa: E501
+            This method makes a synchronous HTTP request by default. To make an
+            asynchronous HTTP request, please pass async_req=True
 
-        :param async_req bool: execute request asynchronously
-        :param AuthenticateRequest authenticate_request: (required)
-        :param _preload_content: if False, the urllib3.HTTPResponse object will
-                                 be returned without reading/decoding response
-                                 data. Default is True.
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :return: Token
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        return self.pubkey_app_authenticate_post_with_http_info(authenticate_request, **kwargs)  # noqa: E501
+            >>> thread = api.pubkey_app_authenticate_post(authenticate_request, async_req=True)
+            >>> result = thread.get()
 
-    def pubkey_app_authenticate_post_with_http_info(self, authenticate_request, **kwargs):  # noqa: E501
-        """Authenticate an App with public key  # noqa: E501
+            Args:
+                authenticate_request (AuthenticateRequest):
 
-        Based on an authentication request token signed by the application's RSA private key, authenticate the API caller and return a session token.  A HTTP 401 Unauthorized error is returned on errors during authentication (e.g. invalid app, malformed authentication token, app's public key not imported in the pod, invalid token signature etc.).   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.pubkey_app_authenticate_post_with_http_info(authenticate_request, async_req=True)
-        >>> result = thread.get()
+            Keyword Args:
+                _return_http_data_only (bool): response data without head status
+                    code and headers. Default is True.
+                _preload_content (bool): if False, the urllib3.HTTPResponse object
+                    will be returned without reading/decoding response data.
+                    Default is True.
+                _request_timeout (float/tuple): timeout setting for this request. If one
+                    number provided, it will be total request timeout. It can also
+                    be a pair (tuple) of (connection, read) timeouts.
+                    Default is None.
+                _check_input_type (bool): specifies if type checking
+                    should be done one the data sent to the server.
+                    Default is True.
+                _check_return_type (bool): specifies if type checking
+                    should be done one the data received from the server.
+                    Default is True.
+                _host_index (int/None): specifies the index of the server
+                    that we want to use.
+                    Default is read from the configuration.
+                async_req (bool): execute request asynchronously
 
-        :param async_req bool: execute request asynchronously
-        :param AuthenticateRequest authenticate_request: (required)
-        :param _return_http_data_only: response data without head status code
-                                       and headers
-        :param _preload_content: if False, the urllib3.HTTPResponse object will
-                                 be returned without reading/decoding response
-                                 data. Default is True.
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :return: tuple(Token, status_code(int), headers(HTTPHeaderDict))
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
+            Returns:
+                Token
+                    If the method is called asynchronously, returns the request
+                    thread.
+            """
+            kwargs['async_req'] = kwargs.get(
+                'async_req', False
+            )
+            kwargs['_return_http_data_only'] = kwargs.get(
+                '_return_http_data_only', True
+            )
+            kwargs['_preload_content'] = kwargs.get(
+                '_preload_content', True
+            )
+            kwargs['_request_timeout'] = kwargs.get(
+                '_request_timeout', None
+            )
+            kwargs['_check_input_type'] = kwargs.get(
+                '_check_input_type', True
+            )
+            kwargs['_check_return_type'] = kwargs.get(
+                '_check_return_type', True
+            )
+            kwargs['_host_index'] = kwargs.get('_host_index')
+            kwargs['authenticate_request'] = \
+                authenticate_request
+            return self.call_with_http_info(**kwargs)
 
-        local_var_params = locals()
-
-        all_params = [
-            'authenticate_request'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
+        self.pubkey_app_authenticate_post = Endpoint(
+            settings={
+                'response_type': (Token,),
+                'auth': [],
+                'endpoint_path': '/pubkey/app/authenticate',
+                'operation_id': 'pubkey_app_authenticate_post',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'authenticate_request',
+                ],
+                'required': [
+                    'authenticate_request',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'authenticate_request':
+                        (AuthenticateRequest,),
+                },
+                'attribute_map': {
+                },
+                'location_map': {
+                    'authenticate_request': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client,
+            callable=__pubkey_app_authenticate_post
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
-            if key not in all_params:
-                raise ApiTypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method pubkey_app_authenticate_post" % key
-                )
-            local_var_params[key] = val
-        del local_var_params['kwargs']
-        # verify the required parameter 'authenticate_request' is set
-        if self.api_client.client_side_validation and ('authenticate_request' not in local_var_params or  # noqa: E501
-                                                        local_var_params['authenticate_request'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `authenticate_request` when calling `pubkey_app_authenticate_post`")  # noqa: E501
+        def __pubkey_app_user_user_id_authenticate_post(
+            self,
+            session_token,
+            user_id,
+            **kwargs
+        ):
+            """Authenticate an application in a delegated context to act on behalf of a user  # noqa: E501
 
-        collection_formats = {}
+            This method makes a synchronous HTTP request by default. To make an
+            asynchronous HTTP request, please pass async_req=True
 
-        path_params = {}
+            >>> thread = api.pubkey_app_user_user_id_authenticate_post(session_token, user_id, async_req=True)
+            >>> result = thread.get()
 
-        query_params = []
+            Args:
+                session_token (str): App Session authentication token.
+                user_id (int): the user ID
 
-        header_params = {}
+            Keyword Args:
+                _return_http_data_only (bool): response data without head status
+                    code and headers. Default is True.
+                _preload_content (bool): if False, the urllib3.HTTPResponse object
+                    will be returned without reading/decoding response data.
+                    Default is True.
+                _request_timeout (float/tuple): timeout setting for this request. If one
+                    number provided, it will be total request timeout. It can also
+                    be a pair (tuple) of (connection, read) timeouts.
+                    Default is None.
+                _check_input_type (bool): specifies if type checking
+                    should be done one the data sent to the server.
+                    Default is True.
+                _check_return_type (bool): specifies if type checking
+                    should be done one the data received from the server.
+                    Default is True.
+                _host_index (int/None): specifies the index of the server
+                    that we want to use.
+                    Default is read from the configuration.
+                async_req (bool): execute request asynchronously
 
-        form_params = []
-        local_var_files = {}
+            Returns:
+                Token
+                    If the method is called asynchronously, returns the request
+                    thread.
+            """
+            kwargs['async_req'] = kwargs.get(
+                'async_req', False
+            )
+            kwargs['_return_http_data_only'] = kwargs.get(
+                '_return_http_data_only', True
+            )
+            kwargs['_preload_content'] = kwargs.get(
+                '_preload_content', True
+            )
+            kwargs['_request_timeout'] = kwargs.get(
+                '_request_timeout', None
+            )
+            kwargs['_check_input_type'] = kwargs.get(
+                '_check_input_type', True
+            )
+            kwargs['_check_return_type'] = kwargs.get(
+                '_check_return_type', True
+            )
+            kwargs['_host_index'] = kwargs.get('_host_index')
+            kwargs['session_token'] = \
+                session_token
+            kwargs['user_id'] = \
+                user_id
+            return self.call_with_http_info(**kwargs)
 
-        body_params = None
-        if 'authenticate_request' in local_var_params:
-            body_params = local_var_params['authenticate_request']
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = []  # noqa: E501
-
-        return self.api_client.call_api(
-            '/pubkey/app/authenticate', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type='Token',  # noqa: E501
-            auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def pubkey_app_user_user_id_authenticate_post(self, session_token, user_id, **kwargs):  # noqa: E501
-        """Authenticate an application in a delegated context to act on behalf of a user  # noqa: E501
-
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.pubkey_app_user_user_id_authenticate_post(session_token, user_id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool: execute request asynchronously
-        :param str session_token: App Session authentication token. (required)
-        :param int user_id: the user ID (required)
-        :param _preload_content: if False, the urllib3.HTTPResponse object will
-                                 be returned without reading/decoding response
-                                 data. Default is True.
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :return: Token
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        return self.pubkey_app_user_user_id_authenticate_post_with_http_info(session_token, user_id, **kwargs)  # noqa: E501
-
-    def pubkey_app_user_user_id_authenticate_post_with_http_info(self, session_token, user_id, **kwargs):  # noqa: E501
-        """Authenticate an application in a delegated context to act on behalf of a user  # noqa: E501
-
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.pubkey_app_user_user_id_authenticate_post_with_http_info(session_token, user_id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool: execute request asynchronously
-        :param str session_token: App Session authentication token. (required)
-        :param int user_id: the user ID (required)
-        :param _return_http_data_only: response data without head status code
-                                       and headers
-        :param _preload_content: if False, the urllib3.HTTPResponse object will
-                                 be returned without reading/decoding response
-                                 data. Default is True.
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :return: tuple(Token, status_code(int), headers(HTTPHeaderDict))
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        local_var_params = locals()
-
-        all_params = [
-            'session_token',
-            'user_id'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
+        self.pubkey_app_user_user_id_authenticate_post = Endpoint(
+            settings={
+                'response_type': (Token,),
+                'auth': [],
+                'endpoint_path': '/pubkey/app/user/{userId}/authenticate',
+                'operation_id': 'pubkey_app_user_user_id_authenticate_post',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'session_token',
+                    'user_id',
+                ],
+                'required': [
+                    'session_token',
+                    'user_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'session_token':
+                        (str,),
+                    'user_id':
+                        (int,),
+                },
+                'attribute_map': {
+                    'session_token': 'sessionToken',
+                    'user_id': 'userId',
+                },
+                'location_map': {
+                    'session_token': 'header',
+                    'user_id': 'path',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client,
+            callable=__pubkey_app_user_user_id_authenticate_post
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
-            if key not in all_params:
-                raise ApiTypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method pubkey_app_user_user_id_authenticate_post" % key
-                )
-            local_var_params[key] = val
-        del local_var_params['kwargs']
-        # verify the required parameter 'session_token' is set
-        if self.api_client.client_side_validation and ('session_token' not in local_var_params or  # noqa: E501
-                                                        local_var_params['session_token'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `session_token` when calling `pubkey_app_user_user_id_authenticate_post`")  # noqa: E501
-        # verify the required parameter 'user_id' is set
-        if self.api_client.client_side_validation and ('user_id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['user_id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `user_id` when calling `pubkey_app_user_user_id_authenticate_post`")  # noqa: E501
+        def __pubkey_app_username_username_authenticate_post(
+            self,
+            session_token,
+            username,
+            **kwargs
+        ):
+            """Authenticate an application in a delegated context to act on behalf of a user  # noqa: E501
 
-        collection_formats = {}
+            This method makes a synchronous HTTP request by default. To make an
+            asynchronous HTTP request, please pass async_req=True
 
-        path_params = {}
-        if 'user_id' in local_var_params:
-            path_params['userId'] = local_var_params['user_id']  # noqa: E501
+            >>> thread = api.pubkey_app_username_username_authenticate_post(session_token, username, async_req=True)
+            >>> result = thread.get()
 
-        query_params = []
+            Args:
+                session_token (str): App Session authentication token.
+                username (str): the username
 
-        header_params = {}
-        if 'session_token' in local_var_params:
-            header_params['sessionToken'] = local_var_params['session_token']  # noqa: E501
+            Keyword Args:
+                _return_http_data_only (bool): response data without head status
+                    code and headers. Default is True.
+                _preload_content (bool): if False, the urllib3.HTTPResponse object
+                    will be returned without reading/decoding response data.
+                    Default is True.
+                _request_timeout (float/tuple): timeout setting for this request. If one
+                    number provided, it will be total request timeout. It can also
+                    be a pair (tuple) of (connection, read) timeouts.
+                    Default is None.
+                _check_input_type (bool): specifies if type checking
+                    should be done one the data sent to the server.
+                    Default is True.
+                _check_return_type (bool): specifies if type checking
+                    should be done one the data received from the server.
+                    Default is True.
+                _host_index (int/None): specifies the index of the server
+                    that we want to use.
+                    Default is read from the configuration.
+                async_req (bool): execute request asynchronously
 
-        form_params = []
-        local_var_files = {}
+            Returns:
+                Token
+                    If the method is called asynchronously, returns the request
+                    thread.
+            """
+            kwargs['async_req'] = kwargs.get(
+                'async_req', False
+            )
+            kwargs['_return_http_data_only'] = kwargs.get(
+                '_return_http_data_only', True
+            )
+            kwargs['_preload_content'] = kwargs.get(
+                '_preload_content', True
+            )
+            kwargs['_request_timeout'] = kwargs.get(
+                '_request_timeout', None
+            )
+            kwargs['_check_input_type'] = kwargs.get(
+                '_check_input_type', True
+            )
+            kwargs['_check_return_type'] = kwargs.get(
+                '_check_return_type', True
+            )
+            kwargs['_host_index'] = kwargs.get('_host_index')
+            kwargs['session_token'] = \
+                session_token
+            kwargs['username'] = \
+                username
+            return self.call_with_http_info(**kwargs)
 
-        body_params = None
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = []  # noqa: E501
-
-        return self.api_client.call_api(
-            '/pubkey/app/user/{userId}/authenticate', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type='Token',  # noqa: E501
-            auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def pubkey_app_username_username_authenticate_post(self, session_token, username, **kwargs):  # noqa: E501
-        """Authenticate an application in a delegated context to act on behalf of a user  # noqa: E501
-
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.pubkey_app_username_username_authenticate_post(session_token, username, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool: execute request asynchronously
-        :param str session_token: App Session authentication token. (required)
-        :param str username: the username (required)
-        :param _preload_content: if False, the urllib3.HTTPResponse object will
-                                 be returned without reading/decoding response
-                                 data. Default is True.
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :return: Token
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        return self.pubkey_app_username_username_authenticate_post_with_http_info(session_token, username, **kwargs)  # noqa: E501
-
-    def pubkey_app_username_username_authenticate_post_with_http_info(self, session_token, username, **kwargs):  # noqa: E501
-        """Authenticate an application in a delegated context to act on behalf of a user  # noqa: E501
-
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.pubkey_app_username_username_authenticate_post_with_http_info(session_token, username, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool: execute request asynchronously
-        :param str session_token: App Session authentication token. (required)
-        :param str username: the username (required)
-        :param _return_http_data_only: response data without head status code
-                                       and headers
-        :param _preload_content: if False, the urllib3.HTTPResponse object will
-                                 be returned without reading/decoding response
-                                 data. Default is True.
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :return: tuple(Token, status_code(int), headers(HTTPHeaderDict))
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        local_var_params = locals()
-
-        all_params = [
-            'session_token',
-            'username'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
+        self.pubkey_app_username_username_authenticate_post = Endpoint(
+            settings={
+                'response_type': (Token,),
+                'auth': [],
+                'endpoint_path': '/pubkey/app/username/{username}/authenticate',
+                'operation_id': 'pubkey_app_username_username_authenticate_post',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'session_token',
+                    'username',
+                ],
+                'required': [
+                    'session_token',
+                    'username',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'session_token':
+                        (str,),
+                    'username':
+                        (str,),
+                },
+                'attribute_map': {
+                    'session_token': 'sessionToken',
+                    'username': 'username',
+                },
+                'location_map': {
+                    'session_token': 'header',
+                    'username': 'path',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client,
+            callable=__pubkey_app_username_username_authenticate_post
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
-            if key not in all_params:
-                raise ApiTypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method pubkey_app_username_username_authenticate_post" % key
-                )
-            local_var_params[key] = val
-        del local_var_params['kwargs']
-        # verify the required parameter 'session_token' is set
-        if self.api_client.client_side_validation and ('session_token' not in local_var_params or  # noqa: E501
-                                                        local_var_params['session_token'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `session_token` when calling `pubkey_app_username_username_authenticate_post`")  # noqa: E501
-        # verify the required parameter 'username' is set
-        if self.api_client.client_side_validation and ('username' not in local_var_params or  # noqa: E501
-                                                        local_var_params['username'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `username` when calling `pubkey_app_username_username_authenticate_post`")  # noqa: E501
+        def __pubkey_authenticate_post(
+            self,
+            authenticate_request,
+            **kwargs
+        ):
+            """Authenticate with public key  # noqa: E501
 
-        collection_formats = {}
+            Based on an authentication request token signed by the caller's RSA private key, authenticate the API caller and return a session token.  A HTTP 401 Unauthorized error is returned on errors during authentication (e.g. invalid user, malformed authentication token, user's public key not imported in the pod, invalid token signature etc.).   # noqa: E501
+            This method makes a synchronous HTTP request by default. To make an
+            asynchronous HTTP request, please pass async_req=True
 
-        path_params = {}
-        if 'username' in local_var_params:
-            path_params['username'] = local_var_params['username']  # noqa: E501
+            >>> thread = api.pubkey_authenticate_post(authenticate_request, async_req=True)
+            >>> result = thread.get()
 
-        query_params = []
+            Args:
+                authenticate_request (AuthenticateRequest):
 
-        header_params = {}
-        if 'session_token' in local_var_params:
-            header_params['sessionToken'] = local_var_params['session_token']  # noqa: E501
+            Keyword Args:
+                _return_http_data_only (bool): response data without head status
+                    code and headers. Default is True.
+                _preload_content (bool): if False, the urllib3.HTTPResponse object
+                    will be returned without reading/decoding response data.
+                    Default is True.
+                _request_timeout (float/tuple): timeout setting for this request. If one
+                    number provided, it will be total request timeout. It can also
+                    be a pair (tuple) of (connection, read) timeouts.
+                    Default is None.
+                _check_input_type (bool): specifies if type checking
+                    should be done one the data sent to the server.
+                    Default is True.
+                _check_return_type (bool): specifies if type checking
+                    should be done one the data received from the server.
+                    Default is True.
+                _host_index (int/None): specifies the index of the server
+                    that we want to use.
+                    Default is read from the configuration.
+                async_req (bool): execute request asynchronously
 
-        form_params = []
-        local_var_files = {}
+            Returns:
+                Token
+                    If the method is called asynchronously, returns the request
+                    thread.
+            """
+            kwargs['async_req'] = kwargs.get(
+                'async_req', False
+            )
+            kwargs['_return_http_data_only'] = kwargs.get(
+                '_return_http_data_only', True
+            )
+            kwargs['_preload_content'] = kwargs.get(
+                '_preload_content', True
+            )
+            kwargs['_request_timeout'] = kwargs.get(
+                '_request_timeout', None
+            )
+            kwargs['_check_input_type'] = kwargs.get(
+                '_check_input_type', True
+            )
+            kwargs['_check_return_type'] = kwargs.get(
+                '_check_return_type', True
+            )
+            kwargs['_host_index'] = kwargs.get('_host_index')
+            kwargs['authenticate_request'] = \
+                authenticate_request
+            return self.call_with_http_info(**kwargs)
 
-        body_params = None
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = []  # noqa: E501
-
-        return self.api_client.call_api(
-            '/pubkey/app/username/{username}/authenticate', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type='Token',  # noqa: E501
-            auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def pubkey_authenticate_post(self, authenticate_request, **kwargs):  # noqa: E501
-        """Authenticate with public key  # noqa: E501
-
-        Based on an authentication request token signed by the caller's RSA private key, authenticate the API caller and return a session token.  A HTTP 401 Unauthorized error is returned on errors during authentication (e.g. invalid user, malformed authentication token, user's public key not imported in the pod, invalid token signature etc.).   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.pubkey_authenticate_post(authenticate_request, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool: execute request asynchronously
-        :param AuthenticateRequest authenticate_request: (required)
-        :param _preload_content: if False, the urllib3.HTTPResponse object will
-                                 be returned without reading/decoding response
-                                 data. Default is True.
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :return: Token
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        return self.pubkey_authenticate_post_with_http_info(authenticate_request, **kwargs)  # noqa: E501
-
-    def pubkey_authenticate_post_with_http_info(self, authenticate_request, **kwargs):  # noqa: E501
-        """Authenticate with public key  # noqa: E501
-
-        Based on an authentication request token signed by the caller's RSA private key, authenticate the API caller and return a session token.  A HTTP 401 Unauthorized error is returned on errors during authentication (e.g. invalid user, malformed authentication token, user's public key not imported in the pod, invalid token signature etc.).   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.pubkey_authenticate_post_with_http_info(authenticate_request, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool: execute request asynchronously
-        :param AuthenticateRequest authenticate_request: (required)
-        :param _return_http_data_only: response data without head status code
-                                       and headers
-        :param _preload_content: if False, the urllib3.HTTPResponse object will
-                                 be returned without reading/decoding response
-                                 data. Default is True.
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :return: tuple(Token, status_code(int), headers(HTTPHeaderDict))
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        local_var_params = locals()
-
-        all_params = [
-            'authenticate_request'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
+        self.pubkey_authenticate_post = Endpoint(
+            settings={
+                'response_type': (Token,),
+                'auth': [],
+                'endpoint_path': '/pubkey/authenticate',
+                'operation_id': 'pubkey_authenticate_post',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'authenticate_request',
+                ],
+                'required': [
+                    'authenticate_request',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'authenticate_request':
+                        (AuthenticateRequest,),
+                },
+                'attribute_map': {
+                },
+                'location_map': {
+                    'authenticate_request': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client,
+            callable=__pubkey_authenticate_post
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
-            if key not in all_params:
-                raise ApiTypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method pubkey_authenticate_post" % key
-                )
-            local_var_params[key] = val
-        del local_var_params['kwargs']
-        # verify the required parameter 'authenticate_request' is set
-        if self.api_client.client_side_validation and ('authenticate_request' not in local_var_params or  # noqa: E501
-                                                        local_var_params['authenticate_request'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `authenticate_request` when calling `pubkey_authenticate_post`")  # noqa: E501
+        def __v1_pubkey_app_authenticate_extension_app_post(
+            self,
+            authenticate_request,
+            **kwargs
+        ):
+            """Authenticate extension app with public key  # noqa: E501
 
-        collection_formats = {}
+            Based on an authentication request token signed by the caller's RSA private key, authenticate the API caller and return a session token.  A HTTP 401 Unauthorized error is returned on errors during authentication (e.g. invalid user, malformed authentication token, user's public key not imported in the pod, invalid token signature etc.).   # noqa: E501
+            This method makes a synchronous HTTP request by default. To make an
+            asynchronous HTTP request, please pass async_req=True
 
-        path_params = {}
+            >>> thread = api.v1_pubkey_app_authenticate_extension_app_post(authenticate_request, async_req=True)
+            >>> result = thread.get()
 
-        query_params = []
+            Args:
+                authenticate_request (AuthenticateExtensionAppRequest):
 
-        header_params = {}
+            Keyword Args:
+                _return_http_data_only (bool): response data without head status
+                    code and headers. Default is True.
+                _preload_content (bool): if False, the urllib3.HTTPResponse object
+                    will be returned without reading/decoding response data.
+                    Default is True.
+                _request_timeout (float/tuple): timeout setting for this request. If one
+                    number provided, it will be total request timeout. It can also
+                    be a pair (tuple) of (connection, read) timeouts.
+                    Default is None.
+                _check_input_type (bool): specifies if type checking
+                    should be done one the data sent to the server.
+                    Default is True.
+                _check_return_type (bool): specifies if type checking
+                    should be done one the data received from the server.
+                    Default is True.
+                _host_index (int/None): specifies the index of the server
+                    that we want to use.
+                    Default is read from the configuration.
+                async_req (bool): execute request asynchronously
 
-        form_params = []
-        local_var_files = {}
+            Returns:
+                ExtensionAppTokens
+                    If the method is called asynchronously, returns the request
+                    thread.
+            """
+            kwargs['async_req'] = kwargs.get(
+                'async_req', False
+            )
+            kwargs['_return_http_data_only'] = kwargs.get(
+                '_return_http_data_only', True
+            )
+            kwargs['_preload_content'] = kwargs.get(
+                '_preload_content', True
+            )
+            kwargs['_request_timeout'] = kwargs.get(
+                '_request_timeout', None
+            )
+            kwargs['_check_input_type'] = kwargs.get(
+                '_check_input_type', True
+            )
+            kwargs['_check_return_type'] = kwargs.get(
+                '_check_return_type', True
+            )
+            kwargs['_host_index'] = kwargs.get('_host_index')
+            kwargs['authenticate_request'] = \
+                authenticate_request
+            return self.call_with_http_info(**kwargs)
 
-        body_params = None
-        if 'authenticate_request' in local_var_params:
-            body_params = local_var_params['authenticate_request']
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = []  # noqa: E501
-
-        return self.api_client.call_api(
-            '/pubkey/authenticate', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type='Token',  # noqa: E501
-            auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
-    def v1_pubkey_app_authenticate_extension_app_post(self, authenticate_request, **kwargs):  # noqa: E501
-        """Authenticate extension app with public key  # noqa: E501
-
-        Based on an authentication request token signed by the caller's RSA private key, authenticate the API caller and return a session token.  A HTTP 401 Unauthorized error is returned on errors during authentication (e.g. invalid user, malformed authentication token, user's public key not imported in the pod, invalid token signature etc.).   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.v1_pubkey_app_authenticate_extension_app_post(authenticate_request, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool: execute request asynchronously
-        :param AuthenticateExtensionAppRequest authenticate_request: (required)
-        :param _preload_content: if False, the urllib3.HTTPResponse object will
-                                 be returned without reading/decoding response
-                                 data. Default is True.
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :return: ExtensionAppTokens
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        return self.v1_pubkey_app_authenticate_extension_app_post_with_http_info(authenticate_request, **kwargs)  # noqa: E501
-
-    def v1_pubkey_app_authenticate_extension_app_post_with_http_info(self, authenticate_request, **kwargs):  # noqa: E501
-        """Authenticate extension app with public key  # noqa: E501
-
-        Based on an authentication request token signed by the caller's RSA private key, authenticate the API caller and return a session token.  A HTTP 401 Unauthorized error is returned on errors during authentication (e.g. invalid user, malformed authentication token, user's public key not imported in the pod, invalid token signature etc.).   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.v1_pubkey_app_authenticate_extension_app_post_with_http_info(authenticate_request, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool: execute request asynchronously
-        :param AuthenticateExtensionAppRequest authenticate_request: (required)
-        :param _return_http_data_only: response data without head status code
-                                       and headers
-        :param _preload_content: if False, the urllib3.HTTPResponse object will
-                                 be returned without reading/decoding response
-                                 data. Default is True.
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :return: tuple(ExtensionAppTokens, status_code(int), headers(HTTPHeaderDict))
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        local_var_params = locals()
-
-        all_params = [
-            'authenticate_request'
-        ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
+        self.v1_pubkey_app_authenticate_extension_app_post = Endpoint(
+            settings={
+                'response_type': (ExtensionAppTokens,),
+                'auth': [],
+                'endpoint_path': '/v1/pubkey/app/authenticate/extensionApp',
+                'operation_id': 'v1_pubkey_app_authenticate_extension_app_post',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'authenticate_request',
+                ],
+                'required': [
+                    'authenticate_request',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'authenticate_request':
+                        (AuthenticateExtensionAppRequest,),
+                },
+                'attribute_map': {
+                },
+                'location_map': {
+                    'authenticate_request': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client,
+            callable=__v1_pubkey_app_authenticate_extension_app_post
         )
-
-        for key, val in six.iteritems(local_var_params['kwargs']):
-            if key not in all_params:
-                raise ApiTypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method v1_pubkey_app_authenticate_extension_app_post" % key
-                )
-            local_var_params[key] = val
-        del local_var_params['kwargs']
-        # verify the required parameter 'authenticate_request' is set
-        if self.api_client.client_side_validation and ('authenticate_request' not in local_var_params or  # noqa: E501
-                                                        local_var_params['authenticate_request'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `authenticate_request` when calling `v1_pubkey_app_authenticate_extension_app_post`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-
-        query_params = []
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        if 'authenticate_request' in local_var_params:
-            body_params = local_var_params['authenticate_request']
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
-
-        # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = []  # noqa: E501
-
-        return self.api_client.call_api(
-            '/v1/pubkey/app/authenticate/extensionApp', 'POST',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type='ExtensionAppTokens',  # noqa: E501
-            auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
