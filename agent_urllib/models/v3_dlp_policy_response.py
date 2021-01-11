@@ -15,7 +15,7 @@ import re  # noqa: F401
 
 import six
 
-from openapi_client.configuration import Configuration
+from agent_urllib.configuration import Configuration
 
 
 class V3DLPPolicyResponse(object):
