@@ -24,10 +24,10 @@ import tempfile
 import six
 from six.moves.urllib.parse import quote
 
-from openapi_client_urllib.configuration import Configuration
-import openapi_client_urllib.models
-from openapi_client_urllib import rest
-from openapi_client_urllib.exceptions import ApiValueError, ApiException
+from openapi_client_aio.configuration import Configuration
+import openapi_client_aio.models
+from openapi_client_aio import rest
+from openapi_client_aio.exceptions import ApiValueError, ApiException
 
 
 class ApiClient(object):
@@ -179,8 +179,7 @@ class ApiClient(object):
 
         try:
             # perform request and return response
-            # CHANGE BELOW, 'await' removed
-            response_data = self.request(
+            response_data = await self.request(
                 method, url, query_params=query_params, headers=header_params,
                 post_params=post_params, body=body,
                 _preload_content=_preload_content,
@@ -307,7 +306,7 @@ class ApiClient(object):
             if klass in self.NATIVE_TYPES_MAPPING:
                 klass = self.NATIVE_TYPES_MAPPING[klass]
             else:
-                klass = getattr(openapi_client_urllib.models, klass)
+                klass = getattr(openapi_client_aio.models, klass)
 
         if klass in self.PRIMITIVE_TYPES:
             return self.__deserialize_primitive(data, klass)

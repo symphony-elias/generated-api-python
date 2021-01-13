@@ -17,8 +17,8 @@ import re  # noqa: F401
 # python 2 and python 3 compatibility library
 import six
 
-from openapi_client_urllib.api_client import ApiClient
-from openapi_client_urllib.exceptions import (  # noqa: F401
+from openapi_client_aio.api_client import ApiClient
+from openapi_client_aio.exceptions import (  # noqa: F401
     ApiTypeError,
     ApiValueError
 )

@@ -15,7 +15,7 @@ import re  # noqa: F401
 
 import six
 
-from openapi_client_urllib.configuration import Configuration
+from openapi_client_aio.configuration import Configuration
 
 
 class AuthenticateRequest(object):

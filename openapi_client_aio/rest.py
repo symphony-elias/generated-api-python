@@ -21,7 +21,7 @@ import certifi
 # python 2 and python 3 compatibility library
 from six.moves.urllib.parse import urlencode
 
-from openapi_client_urllib.exceptions import ApiException, ApiValueError
+from openapi_client_aio.exceptions import ApiException, ApiValueError
 
 logger = logging.getLogger(__name__)
 

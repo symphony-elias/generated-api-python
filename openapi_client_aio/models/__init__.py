@@ -14,8 +14,8 @@
 from __future__ import absolute_import
 
 # import models into model package
-from openapi_client_urllib.models.authenticate_extension_app_request import AuthenticateExtensionAppRequest
-from openapi_client_urllib.models.authenticate_request import AuthenticateRequest
-from openapi_client_urllib.models.error import Error
-from openapi_client_urllib.models.extension_app_tokens import ExtensionAppTokens
-from openapi_client_urllib.models.token import Token
+from openapi_client_aio.models.authenticate_extension_app_request import AuthenticateExtensionAppRequest
+from openapi_client_aio.models.authenticate_request import AuthenticateRequest
+from openapi_client_aio.models.error import Error
+from openapi_client_aio.models.extension_app_tokens import ExtensionAppTokens
+from openapi_client_aio.models.token import Token

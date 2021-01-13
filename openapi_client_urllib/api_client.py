@@ -72,7 +72,7 @@ class ApiClient(object):
         self.configuration = configuration
         self.pool_threads = pool_threads
 
-        self.rest_client = rest.RESTClientObject(configuration)
+        self.rest_client = rest.RESTClientObject(configuration)  # TODO use of rest
         self.default_headers = {}
         if header_name is not None:
             self.default_headers[header_name] = header_value
@@ -385,6 +385,7 @@ class ApiClient(object):
                 post_params=None, body=None, _preload_content=True,
                 _request_timeout=None):
         """Makes the HTTP request using RESTClient."""
+        # TODO use of rest
         if method == "GET":
             return self.rest_client.GET(url,
                                         query_params=query_params,

@@ -21,13 +21,17 @@ def aiohttp_post(token):
     from openapi_client_aio.configuration import Configuration
     from openapi_client_aio.models.authenticate_request import AuthenticateRequest
 
-    request = AuthenticateRequest(token=token)
     configuration = Configuration(host="https://develop2.symphony.com/login")
-    api = AuthenticationApi(ApiClient(configuration=configuration))
+    client = ApiClient(configuration=configuration)
+    api = AuthenticationApi(client)
 
-    post = asyncio.run(api.pubkey_authenticate_post(authenticate_request=request))
+    loop = asyncio.get_event_loop()
+    complete = loop.run_until_complete(
+        api.pubkey_authenticate_post(authenticate_request=(AuthenticateRequest(token=token))))
+    loop.run_until_complete(client.close())
+    loop.close()
 
-    print(post)
+    print(complete)
 
 
 def get_key():

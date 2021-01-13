@@ -17,20 +17,20 @@ from __future__ import absolute_import
 __version__ = "1.0.0"
 
 # import apis into sdk package
-from openapi_client_urllib.api.authentication_api import AuthenticationApi
+from openapi_client_aio.api.authentication_api import AuthenticationApi
 
 # import ApiClient
-from openapi_client_urllib.api_client import ApiClient
-from openapi_client_urllib.configuration import Configuration
-from openapi_client_urllib.exceptions import OpenApiException
-from openapi_client_urllib.exceptions import ApiTypeError
-from openapi_client_urllib.exceptions import ApiValueError
-from openapi_client_urllib.exceptions import ApiKeyError
-from openapi_client_urllib.exceptions import ApiException
+from openapi_client_aio.api_client import ApiClient
+from openapi_client_aio.configuration import Configuration
+from openapi_client_aio.exceptions import OpenApiException
+from openapi_client_aio.exceptions import ApiTypeError
+from openapi_client_aio.exceptions import ApiValueError
+from openapi_client_aio.exceptions import ApiKeyError
+from openapi_client_aio.exceptions import ApiException
 # import models into sdk package
-from openapi_client_urllib.models.authenticate_extension_app_request import AuthenticateExtensionAppRequest
-from openapi_client_urllib.models.authenticate_request import AuthenticateRequest
-from openapi_client_urllib.models.error import Error
-from openapi_client_urllib.models.extension_app_tokens import ExtensionAppTokens
-from openapi_client_urllib.models.token import Token
+from openapi_client_aio.models.authenticate_extension_app_request import AuthenticateExtensionAppRequest
+from openapi_client_aio.models.authenticate_request import AuthenticateRequest
+from openapi_client_aio.models.error import Error
+from openapi_client_aio.models.extension_app_tokens import ExtensionAppTokens
+from openapi_client_aio.models.token import Token
 
