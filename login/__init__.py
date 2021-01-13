@@ -15,7 +15,7 @@ def urllib_post(token):
     print(post)
 
 
-def aiohttp_post(token):
+async def aiohttp_post(token):
     from openapi_client_aio.api.authentication_api import AuthenticationApi
     from openapi_client_aio.api_client import ApiClient
     from openapi_client_aio.configuration import Configuration
@@ -25,13 +25,10 @@ def aiohttp_post(token):
     client = ApiClient(configuration=configuration)
     api = AuthenticationApi(client)
 
-    loop = asyncio.get_event_loop()
-    complete = loop.run_until_complete(
-        api.pubkey_authenticate_post(authenticate_request=(AuthenticateRequest(token=token))))
-    loop.run_until_complete(client.close())
-    loop.close()
+    post = await api.pubkey_authenticate_post(authenticate_request=(AuthenticateRequest(token=token)))
+    await client.close()
 
-    print(complete)
+    print(post)
 
 
 def get_key():
@@ -52,4 +49,4 @@ def create_jwt():
 
 
 if __name__ == "__main__":
-    aiohttp_post(create_jwt())
+    asyncio.run(aiohttp_post(create_jwt()))
