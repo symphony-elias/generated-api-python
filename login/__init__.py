@@ -1,18 +1,34 @@
+import asyncio
+
 from jose import jwt
 
 import datetime
 
-from openapi_client_urllib import Configuration, ApiClient
-from openapi_client_urllib.api.authentication_api import AuthenticationApi
-from openapi_client_urllib.model.authenticate_request import AuthenticateRequest
-
 
 def urllib_post(token):
+    from openapi_client_urllib import Configuration, ApiClient
+    from openapi_client_urllib.api.authentication_api import AuthenticationApi
+    from openapi_client_urllib.model.authenticate_request import AuthenticateRequest
     request = AuthenticateRequest(token=token)
     configuration = Configuration(host="https://develop2.symphony.com/login")
 
     api = AuthenticationApi(ApiClient(configuration=configuration))
     post = api.pubkey_authenticate_post(authenticate_request=request)
+    print(post)
+
+
+async def aio_post(token):
+    from openapi_client_aio import Configuration, ApiClient
+    from openapi_client_aio.api.authentication_api import AuthenticationApi
+    from openapi_client_aio.model.authenticate_request import AuthenticateRequest
+
+    configuration = Configuration(host="https://develop2.symphony.com/login")
+
+    client = ApiClient(configuration=configuration)
+    api = AuthenticationApi(client)
+
+    post = await api.pubkey_authenticate_post(authenticate_request=(AuthenticateRequest(token=token)))
+    await client.close()
     print(post)
 
 
@@ -34,4 +50,4 @@ def create_jwt():
 
 
 if __name__ == "__main__":
-    urllib_post(create_jwt())
+    asyncio.run(aio_post(create_jwt()))
