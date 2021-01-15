@@ -5,9 +5,9 @@ from jose import jwt
 import datetime
 
 from aiohttp_gen_api import Configuration, ApiClient
-from aiohttp_gen_api.api.authentication_api import AuthenticationApi
-from aiohttp_gen_api.api.messages_api import MessagesApi
-from aiohttp_gen_api.model.authenticate_request import AuthenticateRequest
+from aiohttp_gen_api.login_api.authentication_api import AuthenticationApi
+from aiohttp_gen_api.agent_api.messages_api import MessagesApi
+from aiohttp_gen_api.login_model.authenticate_request import AuthenticateRequest
 
 
 async def get_session_token(token):

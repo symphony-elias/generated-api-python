@@ -51,8 +51,8 @@ PRIMITIVE_TYPES = (list, float, int, bool, datetime, date, str, file_type)
 
 def allows_single_value_input(cls):
     """
-    This function returns True if the input composed schema model or any
-    descendant model allows a value only input
+    This function returns True if the input composed schema login_model or any
+    descendant login_model allows a value only input
     This is true for cases where oneOf contains items like:
     oneOf:
       - float
@@ -75,7 +75,7 @@ def allows_single_value_input(cls):
 
 def composed_model_input_classes(cls):
     """
-    This function returns a list of the possible models that can be accepted as
+    This function returns a list of the possible login_models that can be accepted as
     inputs.
     TODO: lru_cache this
     """
@@ -285,7 +285,7 @@ class OpenApiModel(object):
 
 
 class ModelSimple(OpenApiModel):
-    """the parent class of models whose type != object in their
+    """the parent class of login_models whose type != object in their
     swagger/openapi"""
 
     def __setitem__(self, name, value):
@@ -322,7 +322,7 @@ class ModelSimple(OpenApiModel):
         return name in self.__dict__['_data_store']
 
     def to_str(self):
-        """Returns the string representation of the model"""
+        """Returns the string representation of the login_model"""
         return str(self.value)
 
     def __eq__(self, other):
@@ -340,7 +340,7 @@ class ModelSimple(OpenApiModel):
 
 
 class ModelNormal(OpenApiModel):
-    """the parent class of models whose type == object in their
+    """the parent class of login_models whose type == object in their
     swagger/openapi"""
 
     def __setitem__(self, name, value):
@@ -377,11 +377,11 @@ class ModelNormal(OpenApiModel):
         return name in self.__dict__['_data_store']
 
     def to_dict(self):
-        """Returns the model properties as a dict"""
+        """Returns the login_model properties as a dict"""
         return model_to_dict(self, serialize=False)
 
     def to_str(self):
-        """Returns the string representation of the model"""
+        """Returns the string representation of the login_model"""
         return pprint.pformat(self.to_dict())
 
     def __eq__(self, other):
@@ -403,7 +403,7 @@ class ModelNormal(OpenApiModel):
 
 
 class ModelComposed(OpenApiModel):
-    """the parent class of models whose type == object in their
+    """the parent class of login_models whose type == object in their
     swagger/openapi and have oneOf/allOf/anyOf
 
     When one sets a property we use var_name_to_model_instances to store the value in
@@ -467,10 +467,10 @@ class ModelComposed(OpenApiModel):
         model_instances = self._var_name_to_model_instances.get(
             name, self._additional_properties_model_instances)
         values = []
-        # A composed model stores child (oneof/anyOf/allOf) models under
+        # A composed login_model stores child (oneof/anyOf/allOf) login_models under
         # self._var_name_to_model_instances. A named property can exist in
-        # multiple child models. If the property is present in more than one
-        # child model, the value must be the same across all the child models.
+        # multiple child login_models. If the property is present in more than one
+        # child login_model, the value must be the same across all the child login_models.
         if model_instances:
             for model_instance in model_instances:
                 if name in model_instance._data_store:
@@ -518,11 +518,11 @@ class ModelComposed(OpenApiModel):
         return False
 
     def to_dict(self):
-        """Returns the model properties as a dict"""
+        """Returns the login_model properties as a dict"""
         return model_to_dict(self, serialize=False)
 
     def to_str(self):
-        """Returns the string representation of the model"""
+        """Returns the string representation of the login_model"""
         return pprint.pformat(self.to_dict())
 
     def __eq__(self, other):
@@ -581,7 +581,7 @@ UPCONVERSION_TYPE_PAIRS = (
 )
 
 COERCIBLE_TYPE_PAIRS = {
-    False: (  # client instantiation of a model with client data
+    False: (  # client instantiation of a login_model with client data
         # (dict, ModelComposed),
         # (list, ModelComposed),
         # (dict, ModelNormal),
@@ -929,7 +929,7 @@ def remove_uncoercible(required_types_classes, current_item, spec_property_namin
 
     results_classes = []
     for required_type_class in required_types_classes:
-        # convert our models to OpenApiModel
+        # convert our login_models to OpenApiModel
         required_type_class_simplified = required_type_class
         if isinstance(required_type_class_simplified, type):
             if issubclass(required_type_class_simplified, ModelComposed):
@@ -1116,10 +1116,10 @@ def get_discriminator_class(model_class,
     """Returns the child class specified by the discriminator.
 
     Args:
-        model_class (OpenApiModel): the model class.
+        model_class (OpenApiModel): the login_model class.
         discr_name (string): the name of the discriminator property.
         discr_value (any): the discriminator value.
-        cls_visited (list): list of model classes that have been visited.
+        cls_visited (list): list of login_model classes that have been visited.
             Used to determine the discriminator class without
             visiting circular references indefinitely.
 
@@ -1164,14 +1164,14 @@ def get_discriminator_class(model_class,
 
 def deserialize_model(model_data, model_class, path_to_item, check_type,
                       configuration, spec_property_naming):
-    """Deserializes model_data to model instance.
+    """Deserializes model_data to login_model instance.
 
     Args:
-        model_data (int/str/float/bool/none_type/list/dict): data to instantiate the model
-        model_class (OpenApiModel): the model class
-        path_to_item (list): path to the model in the received data
+        model_data (int/str/float/bool/none_type/list/dict): data to instantiate the login_model
+        model_class (OpenApiModel): the login_model class
+        path_to_item (list): path to the login_model in the received data
         check_type (bool): whether to check the data tupe for the values in
-            the model
+            the login_model
         configuration (Configuration): the instance to use to convert files
         spec_property_naming (bool): True if the variable names in the input
             data are serialized names as specified in the OpenAPI document.
@@ -1179,7 +1179,7 @@ def deserialize_model(model_data, model_class, path_to_item, check_type,
             variable names in PEP-8 snake case.
 
     Returns:
-        model instance
+        login_model instance
 
     Raise:
         ApiTypeError
@@ -1471,10 +1471,10 @@ def validate_and_convert_types(input_value, required_types_mixed, path_to_item,
 
 
 def model_to_dict(model_instance, serialize=True):
-    """Returns the model properties as a dict
+    """Returns the login_model properties as a dict
 
     Args:
-        model_instance (one of your model instances): the model instance that
+        model_instance (one of your login_model instances): the login_model instance that
             will be converted to a dict.
 
     Keyword Args:
@@ -1623,7 +1623,7 @@ def get_oneof_instance(cls, model_kwargs, constant_kwargs, model_arg=None):
             The input data, e.g. the payload that must match a oneOf schema
             in the OpenAPI document.
         constant_kwargs (dict): var_name to var_value
-            args that every model requires, including configuration, server
+            args that every login_model requires, including configuration, server
             and path to item.
 
     Kwargs:
@@ -1631,7 +1631,7 @@ def get_oneof_instance(cls, model_kwargs, constant_kwargs, model_arg=None):
             the value to assign to a primitive class or ModelSimple class
             Notes:
             - this is only passed in when oneOf includes types which are not object
-            - None is used to suppress handling of model_arg, nullable models are handled in __new__
+            - None is used to suppress handling of model_arg, nullable login_models are handled in __new__
 
     Returns
         oneof_instance (instance)
@@ -1667,7 +1667,7 @@ def get_oneof_instance(cls, model_kwargs, constant_kwargs, model_arg=None):
                 if var_name in fixed_model_args:
                     kwargs[var_name] = fixed_model_args[var_name]
 
-            # do not try to make a model with no input args
+            # do not try to make a login_model with no input args
             if len(kwargs) == 0:
                 continue
 
@@ -1715,7 +1715,7 @@ def get_anyof_instances(self, model_args, constant_args):
             The input data, e.g. the payload that must match at least one
             anyOf child schema in the OpenAPI document.
         constant_args (dict): var_name to var_value
-            args that every model requires, including configuration, server
+            args that every login_model requires, including configuration, server
             and path to item.
 
     Returns
@@ -1743,7 +1743,7 @@ def get_anyof_instances(self, model_args, constant_args):
             if var_name in fixed_model_args:
                 kwargs[var_name] = fixed_model_args[var_name]
 
-        # do not try to make a model with no input args
+        # do not try to make a login_model with no input args
         if len(kwargs) == 0:
             continue
 
@@ -1820,9 +1820,9 @@ def validate_get_composed_info(constant_args, model_args, self):
     - any of the allOf schemas do not match the model_args input data
 
     Args:
-        constant_args (dict): these are the args that every model requires
+        constant_args (dict): these are the args that every login_model requires
         model_args (dict): these are the required and optional spec args that
-            were passed in to make this model
+            were passed in to make this login_model
         self (class): the class that we are instantiating
             This class contains self._composed_schemas
 
@@ -1835,7 +1835,7 @@ def validate_get_composed_info(constant_args, model_args, self):
                 the model_instance may be self or an instance of one of the
                 classes in self.composed_instances()
             additional_properties_model_instances (list): a list of the
-                model instances which have the property
+                login_model instances which have the property
                 additional_properties_type. This list can include self
     """
     # create composed_instances

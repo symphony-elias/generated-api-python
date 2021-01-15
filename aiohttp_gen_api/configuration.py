@@ -331,7 +331,7 @@ class Configuration(object):
 
         :param identifier: The identifier of apiKey.
         :param alias: The alternative identifier of apiKey.
-        :return: The token for api key authentication.
+        :return: The token for login_api key authentication.
         """
         if self.refresh_api_key_hook is not None:
             self.refresh_api_key_hook(self)
@@ -359,7 +359,7 @@ class Configuration(object):
         ).get('authorization')
 
     def auth_settings(self):
-        """Gets Auth Settings dict for api client.
+        """Gets Auth Settings dict for login_api client.
 
         :return: The Auth Settings information dict.
         """
