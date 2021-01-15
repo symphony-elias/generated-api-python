@@ -48,11 +48,9 @@ class RESTClientObject(object):
         if maxsize is None:
             maxsize = configuration.connection_pool_maxsize
 
-        ssl_context = ssl.create_default_context(cafile=configuration.ssl_ca_cert)
+        ssl_context = ssl.create_default_context(purpose=ssl.Purpose.CLIENT_AUTH, cafile=configuration.ssl_ca_cert)
         if configuration.cert_file:
-            ssl_context.load_cert_chain(
-                configuration.cert_file, keyfile=configuration.key_file
-            )
+            ssl_context.load_verify_locations(configuration.cert_file)
 
         if not configuration.verify_ssl:
             ssl_context.check_hostname = False
